@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ResourceController;
 use App\Http\Controllers\Web\ReviewController;
@@ -29,10 +30,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/resources/{resource}/file', [ResourceController::class, 'file'])->name('resources.file');
     Route::post('/resources/{resource}/report', [ResourceController::class, 'report'])->name('resources.report');
 
-    Route::middleware('role:moderator,faculty')->prefix('review')->group(function () {
+    Route::middleware('role:moderator,faculty,admin')->prefix('review')->group(function () {
         Route::get('/', [ReviewController::class, 'index'])->name('review');
         Route::post('/{resource}/approve', [ReviewController::class, 'approve'])->name('review.approve');
         Route::post('/{resource}/reject', [ReviewController::class, 'reject'])->name('review.reject');
         Route::post('/{resource}/dismiss', [ReviewController::class, 'dismiss'])->name('review.dismiss');
+    });
+
+    // Administrator-only account management. The GET page and the POST that
+    // changes a role are both guarded, so typing the URL or posting a form
+    // by hand fails the same way.
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin');
+        Route::post('/users/{user}/role', [AdminController::class, 'updateRole'])->name('admin.users.role');
     });
 });

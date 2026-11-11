@@ -31,6 +31,9 @@
         @if($me->isStaff())
             <a href="{{ route('review') }}" class="{{ request()->routeIs('review') ? 'on' : '' }}"><x-icon name="shield-check" /> Review queue</a>
         @endif
+        @if($me->isAdmin())
+            <a href="{{ route('admin') }}" class="{{ request()->routeIs('admin') ? 'on' : '' }}"><x-icon name="user" /> Administration</a>
+        @endif
         <a href="{{ route('shelf') }}" class="{{ request()->routeIs('shelf') ? 'on' : '' }}"><x-icon name="file-text" /> My shelf</a>
     </nav>
 </header>

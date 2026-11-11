@@ -70,7 +70,10 @@ label { display: block; font-size: 13px; color: var(--muted); margin: 14px 0 4px
 .empty { border: 1px dashed var(--line); border-radius: 4px; padding: 32px; text-align: center; color: var(--muted); }
 .pager { display: flex; gap: 16px; justify-content: center; align-items: center; margin-top: 20px; color: var(--muted); font-size: 14px; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.badge { display: flex; align-items: center; gap: 16px; }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th, .table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.table th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.table td .meta { margin: 0; }.badge { display: flex; align-items: center; gap: 16px; }
 .badge .big { font-family: Georgia, serif; font-size: 22px; color: var(--maroon); }
 .errors { color: #5E0B14; font-size: 14px; margin: 10px 0 0; padding-left: 18px; }
 

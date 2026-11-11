@@ -16,7 +16,7 @@
             <li>Practice with past exams checked by moderators and faculty</li>
             <li>Earn credits and badges when you share your own notes</li>
         </ul>
-        <p class="demo">Demo accounts (password <b>password123</b>): student@iskolar.test, author@iskolar.test, moderator@iskolar.test, faculty@iskolar.test</p>
+        <p class="demo">Demo accounts (password <b>password123</b>): admin@iskolar.test, student@iskolar.test, author@iskolar.test, moderator@iskolar.test, faculty@iskolar.test</p>
     </section>
 
     <section class="panel">

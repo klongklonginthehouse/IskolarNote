@@ -31,14 +31,20 @@ class User extends Authenticatable
         return $this->hasMany(Download::class);
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /** Moderators, faculty and admins can open the review queue. */
     public function isStaff(): bool
     {
-        return in_array($this->role, ['moderator', 'faculty'], true);
+        return in_array($this->role, ['moderator', 'faculty', 'admin'], true);
     }
 
     public function canUpload(): bool
     {
-        return in_array($this->role, ['author', 'moderator', 'faculty'], true);
+        return in_array($this->role, ['author', 'moderator', 'faculty', 'admin'], true);
     }
 
     /** Badge tiers: reputation badge system from the proposal. */
