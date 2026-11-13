@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         $author = $mk('Miguel Santos', 'author@iskolar.test', 'author');
         $mod = $mk('Bea Lim', 'moderator@iskolar.test', 'moderator');
         $faculty = $mk('Prof. Dela Cruz', 'faculty@iskolar.test', 'faculty');
-        $admin = $mk('Rina Ocampo', 'admin@iskolar.test', 'admin');
+        $admin = $mk('Rene Baterbonet', 'admin@iskolar.test', 'admin');
 
         $rows = [
             [$author, 'Computer Science', 'Stacks, queues and linked lists: lecture summary', 'CS 12', 'Prof. Dela Cruz', 'lecture_notes', 'verified', false, 41],
