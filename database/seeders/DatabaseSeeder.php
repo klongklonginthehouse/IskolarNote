@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $depts = collect(['Engineering', 'Computer Science', 'Sciences', 'Business', 'Arts and Letters', 'Education'])
+        $depts = collect(['Engineering', 'Computer Science', 'Sciences', 'Business', 'Arts', 'Education'])
             ->mapWithKeys(fn ($n) => [$n => Department::firstOrCreate(['name' => $n])->id]);
 
         // Demo accounts. Password for all: password123
