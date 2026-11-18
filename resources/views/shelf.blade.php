@@ -6,7 +6,7 @@
         <div>
             <div class="big">{{ $badge ?? 'No badge yet' }}</div>
             <div class="meta m-0">
-                {{ auth()->user()->name }} · {{ auth()->user()->credits }} credits · {{ $reputation }} reputation points
+                {{ $user->name }} · {{ $user->credits }} credits · {{ $reputation }} reputation points
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="body">
                     <h3><a href="{{ route('resources.show', $r) }}">{{ $r->title }}</a></h3>
-                    <p class="meta">{{ $r->user_id === auth()->id() ? 'Uploaded by you' : 'Downloaded' }} · {{ $r->department->name }}</p>
+                    <p class="meta">{{ $r->user_id === $user->id ? 'Uploaded by you' : 'Downloaded' }} · {{ $r->department->name }}</p>
                     <div class="actions">
                         @include('partials.status')
                         @if($r->status === 'verified')
@@ -33,7 +33,7 @@
                                 @csrf
                                 <button type="submit" class="btn small"><x-icon name="download" :size="14" aria-hidden="true" /> Download again</button>
                             </form>
-                        @elseif($r->user_id === auth()->id() && $r->file_path)
+                        @elseif($r->user_id === $user->id && $r->file_path)
                             <a class="btn ghost small" href="{{ route('resources.file', $r) }}"><x-icon name="eye" :size="14" aria-hidden="true" /> Open file</a>
                         @endif
                     </div>

@@ -55,6 +55,7 @@ resolve copyright reports; the administrator manages accounts and their roles.
 | Browse verified notes (`GET /browse`) | `browse` | Allowed | Allowed | Allowed | Allowed | Allowed |
 | View a note and its details (`GET /resources/{id}`) | `resources.show` | Allowed | Allowed | Allowed | Allowed | Allowed |
 | Personal shelf and badges (`GET /shelf`) | `shelf` | Allowed | Allowed | Allowed | Allowed | Allowed |
+| Open another account's shelf (`GET /shelf/{user}`) | `shelf.show` | Denied | Denied | Denied | Denied | Denied |
 | Download / vote / report (`POST /resources/...`) | `resources.*` | Allowed | Allowed | Allowed | Allowed | Allowed |
 | Upload a note (`GET /upload`, `POST /upload`) | `upload` | Allowed | Allowed | Allowed | Allowed | Denied |
 | Publish an official syllabus | `upload.store` | Allowed | Allowed | Denied | Denied | Denied |
@@ -65,6 +66,11 @@ resolve copyright reports; the administrator manages accounts and their roles.
 
 At least one action is open to every authenticated role (browse and download), and several actions are
 restricted to particular roles (upload, review, administration).
+
+Each account's shelf is private. `GET /shelf` renders the caller's own shelf; `GET /shelf/{user}` is
+guarded by an **ownership** comparison, not a role list, so no role — administrator included — can
+open another account's shelf. The row above is `Denied` for every role because the check is
+per-record: the owner of the shelf being requested is the only account allowed through.
 
 ## Middleware
 
@@ -78,6 +84,12 @@ restricted to particular roles (upload, review, administration).
 | Behaviour on denial | HTTP `403` with `resources/views/errors/403.blade.php`; JSON `403` for `Accept: application/json`; guests are redirected to login |
 
 The alias is also used by the API review routes, so the same class guards both surfaces.
+
+The shelf route is deliberately **not** role-guarded. A role list cannot express "only the owner",
+because every role is some account's role; the rule belongs to the record. `ProfileController::show()`
+compares the route-model user's `id` against `$request->user()->id` and calls `abort(403)` on any
+mismatch, so an administrator requesting `/shelf/1` is refused the same way a student requesting
+`/shelf/5` is.
 
 ## How the middleware authorizes a request
 
@@ -93,7 +105,7 @@ server.
 
 ## Evidence
 
-All five screenshots are in [`evidence/`](evidence/).
+All six screenshots are in [`evidence/`](evidence/).
 
 | # | File | What it shows |
 |---|---|---|
@@ -102,6 +114,7 @@ All five screenshots are in [`evidence/`](evidence/).
 | 3 | [`03-role-denied.png`](evidence/03-role-denied.png) | Student types `/admin` directly — HTTP 403, "Requested: /admin". |
 | 4 | [`04-guest-blocked.png`](evidence/04-guest-blocked.png) | Logged out, opening `/admin` redirects to the login page. |
 | 5 | [`05-restricted-action-denied.png`](evidence/05-restricted-action-denied.png) | Student replays `POST /admin/users/1/role` with a valid CSRF token — 403, and the target account's role stayed `student`. |
+| 6 | [`06-other-shelf-denied.png`](evidence/06-other-shelf-denied.png) | Admin (`admin@iskolar.test`) types `/shelf/1` directly — HTTP 403, "Requested: /shelf/1". An administrator owns no other account's shelf. |
 
 Automated checks cover the same cases (see `tests/Feature/RbacTest.php`):
 

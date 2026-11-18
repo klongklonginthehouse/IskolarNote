@@ -10,6 +10,10 @@ Captured from the running application at `http://127.0.0.1:8123` with the seeded
 | `03-role-denied.png` | student@iskolar.test (student) | `/admin` typed directly | 403 — "Access denied", requested URL shown on the page |
 | `04-guest-blocked.png` | not logged in | `/admin` typed directly | redirected to `/login` |
 | `05-restricted-action-denied.png` | student@iskolar.test (student) | `POST /admin/users/1/role` with `role=admin` and a valid CSRF token | 403 — no change; `users.id = 1` stayed `student` |
+| `06-other-shelf-denied.png` | admin@iskolar.test (admin) | `/shelf/1` typed directly | 403 — "Access denied", requested URL shown on the page |
 
 The student account has no "Administration" or "Review queue" link in the navigation, but that is only
 cosmetic: tests 3 and 5 show the server refusing the same pages and actions when requested by hand.
+
+Test 6 is the mirror image: the highest-privileged account asking for someone else's shelf is refused
+because the shelf is guarded by ownership, not by role.

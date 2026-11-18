@@ -22,7 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/browse', [ResourceController::class, 'index'])->name('browse');
     Route::get('/upload', [ResourceController::class, 'create'])->name('upload');
     Route::post('/upload', [ResourceController::class, 'store'])->name('upload.store');
+    // The shelf is per account. /shelf is the caller's own; /shelf/{user}
+    // answers 403 for every account but the owner, administrator included.
     Route::get('/shelf', [ProfileController::class, 'shelf'])->name('shelf');
+    Route::get('/shelf/{user}', [ProfileController::class, 'show'])->name('shelf.show');
 
     Route::get('/resources/{resource}', [ResourceController::class, 'show'])->name('resources.show');
     Route::post('/resources/{resource}/vote', [ResourceController::class, 'vote'])->name('resources.vote');

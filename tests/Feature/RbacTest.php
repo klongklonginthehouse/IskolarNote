@@ -107,4 +107,41 @@ class RbacTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['email' => 'mallory@iskolar.test']);
     }
+
+    public function test_owner_can_open_their_own_shelf_by_url(): void
+    {
+        $owner = $this->user('student');
+
+        $this->actingAs($owner)
+            ->get("/shelf/{$owner->id}")
+            ->assertOk()
+            ->assertSee($owner->name);
+    }
+
+    public function test_admin_cannot_open_another_users_shelf(): void
+    {
+        $owner = $this->user('student');
+
+        $this->actingAs($this->user('admin'))
+            ->get("/shelf/{$owner->id}")
+            ->assertForbidden();
+    }
+
+    public function test_every_role_is_denied_another_users_shelf(): void
+    {
+        $owner = $this->user('student');
+
+        foreach (['admin', 'faculty', 'moderator', 'author', 'student'] as $role) {
+            $this->actingAs($this->user($role))
+                ->get("/shelf/{$owner->id}")
+                ->assertForbidden();
+        }
+    }
+
+    public function test_guest_is_redirected_from_a_named_shelf(): void
+    {
+        $owner = $this->user('student');
+
+        $this->get("/shelf/{$owner->id}")->assertRedirect(route('login'));
+    }
 }
